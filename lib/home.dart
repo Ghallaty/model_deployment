@@ -8,7 +8,7 @@ class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
@@ -24,14 +24,14 @@ class _HomeState extends State<Home> {
   }
 
   loadCamera() {
-    cameraController = CameraController(cameras![0], ResolutionPreset.medium);
+    cameraController = CameraController(cameras![0], ResolutionPreset.high);
     cameraController!.initialize().then((value) {
       if (!mounted) {
         return;
       } else {
         setState(() {
-          cameraController!.startImageStream((ImageStream) {
-            cameraImage = ImageStream;
+          cameraController!.startImageStream((imageStream) {
+            cameraImage = imageStream;
             runModel();
           });
         });
@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
           asynch: true);
       predictions!.forEach((element) {
         setState(() {
-          output = element['labels'];
+          output = element['label'];
         });
       });
     }
@@ -69,9 +69,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Live Maturity Detection App'),
-      ),
+      appBar: AppBar(title: Text('Live Maturity Detection')),
       body: Column(children: [
         Padding(
           padding: EdgeInsets.all(20),
@@ -88,7 +86,7 @@ class _HomeState extends State<Home> {
         ),
         Text(
           output,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         )
       ]),
     );
